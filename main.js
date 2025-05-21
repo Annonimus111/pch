@@ -1,11 +1,5 @@
-// window.addEventListener('DOMContentLoaded', () => {
-//     const welcomeText = document.getElementById('h1');
-//     const mailLink = document.querySelector('.mail-link');
-//     console.log(welcomeText);
-//     console.log(mailLink);
-//     welcomeText.classList.add('scale-in');
-//     mailLink.classList.add('scale-in');
-// });
+import emailjs from 'https://cdn.skypack.dev/@emailjs/browser';
+// import emailjs from 'https://cdn.emailjs.com/dist/email.min.mjs';
 
 window.addEventListener('DOMContentLoaded', () => {
     const welcomeText = document.getElementById('h1');
@@ -77,4 +71,39 @@ window.addEventListener('DOMContentLoaded', () => {
             updateCarousel();
         }
     }, 3000); // 3 seconds for autoplay
+});
+
+
+// EmailJs
+window.addEventListener("DOMContentLoaded", () => {
+  emailjs.init("xt0V1rd2v62rjxDUd"); // Replace with your public key
+
+  const form = document.getElementById("claimForm");
+  const statusMsg = document.getElementById("form-status");
+
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      statusMsg.textContent = "Submitting...";
+      statusMsg.className = "";
+
+      emailjs
+        .sendForm("service_9ocjrv5", "template_7g98cmy", form)
+        .then(() => {
+          statusMsg.textContent = "Form submitted successfully!";
+          statusMsg.className = "success";
+          form.reset();
+
+          setTimeout(() => {
+            statusMsg.textContent = ""; // Clear the message after 3 seconds
+            statusMsg.classList.remove("success");
+            }, 3000);
+        })
+        .catch((error) => {
+          console.error("EmailJS Error:", error);
+          statusMsg.textContent = "There was an error submitting the form.";
+          statusMsg.className = "error";
+        });
+    });
+  }
 });
